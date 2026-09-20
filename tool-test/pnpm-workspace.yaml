@@ -1,0 +1,5 @@
+# pnpm 11 从 pnpm-workspace.yaml 读取配置（.npmrc 已不再生效）
+# 默认的 isolated 模式会用 junction 组织 node_modules，
+# 在本机（Windows + 中文路径）下顶层链接创建失败 → Node 报 ERR_MODULE_NOT_FOUND。
+# hoisted 改为真实文件（硬链接自 store），绕开该问题。
+nodeLinker: hoisted
