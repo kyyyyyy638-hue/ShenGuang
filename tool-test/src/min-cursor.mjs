@@ -100,43 +100,52 @@ ${platformLine}
 // 用法：
 //   node ./src/min-cursor.mjs                        （用默认任务）
 //   node ./src/min-cursor.mjs 帮我创建一个 hello.txt 内容是 hi
-const query = process.argv.slice(2).join(' ') || `完善 react-todo-app 项目里的 TodoList 应用。
+const query = process.argv.slice(2).join(' ') || `创建一个功能丰富的 React 天气卡片应用：
+1. 创建项目：echo -e "n\nn" | pnpm create vite react-weather-card --template react-ts
+2. 修改 src/App.tsx，实现完整功能的天气卡片：
+- 搜索城市（输入框 + 搜索按钮，回车也能触发）、展示当前天气、切换展示城市、删除城市
+- 当前天气信息：城市名、温度、天气状况文字、天气图标、体感温度、湿度、风速
+- 单位切换：摄氏度 / 华氏度，切换后所有温度同步换算（演示：只做前端换算，不重新请求接口）
+- 分类筛选不适用，改为：城市列表 / 当前展示城市 的区分高亮
+- 统计信息显示：已保存城市数量、当前城市、数据更新时间
+- 加载态与错误态：请求中显示 loading，失败显示明确错误信息 + 重试按钮，不要把错误吞掉假装成功
+- localStorage 数据持久化：城市列表、当前选中城市、温度单位，刷新页面后不丢
+- 数据源用 Open-Meteo（免费、无需 API Key）：
+  地理编码 https://geocoding-api.open-meteo.com/v1/search?name={城市}&count=5&language=zh
+  天气数据 https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code
+  用 fetch 直接调，不要引入 axios 等额外请求库。
+  weather_code 到中文天气文字 + 图标的映射表自己写，覆盖 0/1/2/3/45/48/51/53/55/61/63/65/71/73/75/77/80/81/82/85/86/95/96/99。
+3. 添加复杂样式：
+- 渐变背景（深蓝到青紫，呼应天气主题）
+- 卡片毛玻璃效果（backdrop-filter: blur）、阴影、圆角
+- 悬停效果：卡片上浮 + 阴影加深
+- 响应式：窄屏（< 600px）下城市列表改成纵向堆叠
+4. 添加动画：
+- 添加/删除城市时的过渡动画（入场用 @keyframes，移除用 transition）
+- 温度单位切换、数据刷新时数字的过渡（CSS transition，至少 color 或 transform）
+- 卡片 hover 上浮也用 transition
+- loading 转圈用 CSS @keyframes
+- 不要引入任何动画库（禁止 framer-motion / react-spring / gsap）
+5. 列出目录确认
 
-项目现状：react-todo-app 目录下已经有一个 Vite + React + TypeScript 项目，依赖已安装。
-不要重新创建脚手架（不要跑 pnpm create vite），不要用 npm，只用 pnpm。
-所有命令都用 workingDirectory 参数指定目录，不要在 command 里写 cd。
+注意：使用 pnpm，功能要完整，样式要美观，要有动画效果。
+另外必须改 index.html 的 <title>，Vite 默认模板标题会导致"页面看起来没做完"。
 
-一、先看清楚现状
-用 list_directory 看 react-todo-app/src，再用 read_file 读现有的 App.tsx，然后才动手改。
-不要凭猜测直接覆盖。
-
-二、重写 src/App.tsx，实现功能完整的 TodoList
-（即使现有代码已有一部分，也按下面的要求重写完整版本）
-- 添加任务、删除任务、编辑任务（点编辑按钮进入编辑态，可保存或取消）、标记完成
-- 分类筛选：全部 / 进行中 / 已完成
-- 统计信息：总数、进行中数量、已完成数量
-- localStorage 持久化：刷新页面后数据不丢
-
-三、样式写在 src/App.css
-- 蓝到紫的渐变背景
-- 卡片阴影、圆角
-- 鼠标悬停（hover）效果
-
-四、动画用 CSS transition（不要引入任何动画库）
-- 添加 / 删除时的过渡动画
-- 完成状态切换的过渡
-
-五、验收标准（逐条给出工具输出作为证据；拿不到证据的项就写"未验证"，不要凭印象宣布成功）
-1. 运行 pnpm build（workingDirectory 传 react-todo-app），必须 exit code 为 0 才算通过。
-   如果报错，读 stderr 定位并修，然后重新 build，直到 exit code 为 0。
-   如果报依赖缺失，先跑 pnpm install（不要用 npm，本项目是 pnpm 的 hoisted 布局）。
-2. 用 list_directory 列出 react-todo-app/src，确认 App.tsx 和 App.css 存在。
-3. 用 pnpm run dev 启动 dev server 时必须传 background: true（前台执行会阻塞到 120 秒超时），
-   然后跑 netstat -ano | findstr :5173 确认端口在监听。若 5173 已被占用，vite 会自动换端口，
-   以命令输出里的实际端口为准。
-   不要用 "start /b xxx"、"xxx &" 这类写法自己后台化，那样拿不到输出。
+之后在 react-weather-card 项目中：
+1. 使用 pnpm install 安装依赖
+2. 使用 pnpm run dev 启动服务器（必须传 background: true，前台执行会阻塞到 120 秒超时）
+3. 用 netstat -ano | findstr :5173 确认端口在监听；若 5173 被占用，vite 会自动换端口，以实际输出为准
+4. 【必做】运行时证据：curl 实际端口拿到首页 HTML，确认 <div id="root"> 存在且 <title> 已是天气卡片（不是 Vite 默认标题）
+5. 【必做】数据链路证据：单独 curl 一次 Open-Meteo 接口，贴出返回的 JSON 片段。
+   - 拿到有效数据 → 说明接口链路通。
+   - 拿不到（沙箱/网络限制）→ 必须明确写出"外部 API 在当前环境不可达，天气数据端到端渲染未验证"，
+     并读代码把错误处理分支贴出来证明降级逻辑真实存在。
+   - 严禁因为 build 通过就宣布"天气功能正常"。
+6. 读 package.json 的 dependencies 贴出内容，确认没有动画库和额外请求库
 
 最后报告：每条验收标准对应给出工具返回的证据。
+不允许出现"应该可以了""看起来没问题"这类表述——
+只有 exit code、命令原始输出、文件内容可以当作证据，拿不到就写"未验证"。
 `;
 
 

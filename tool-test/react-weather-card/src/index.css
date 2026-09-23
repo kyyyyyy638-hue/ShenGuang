@@ -1,0 +1,19 @@
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(135deg, #0f2027 0%, #1a3a6b 45%, #4b2c7f 100%);
+  min-height: 100vh;
+  color: #eef2ff;
+}
+
+#root {
+  min-height: 100vh;
+}

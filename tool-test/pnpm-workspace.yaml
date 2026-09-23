@@ -1,5 +1,13 @@
-# pnpm 11 从 pnpm-workspace.yaml 读取配置（.npmrc 已不再生效）
-# 默认的 isolated 模式会用 junction 组织 node_modules，
-# 在本机（Windows + 中文路径）下顶层链接创建失败 → Node 报 ERR_MODULE_NOT_FOUND。
-# hoisted 改为真实文件（硬链接自 store），绕开该问题。
+# pnpm 11 起配置从 pnpm-workspace.yaml 读取（.npmrc 对 pnpm 配置不再生效）
+#
+# 本机问题：isolated 模式下 pnpm 无法在 node_modules 顶层建立链接，
+# node_modules/<scope>/ 会留下空目录，Node 随即报 ERR_MODULE_NOT_FOUND。
+# 已实测与路径是否含中文无关（纯 ASCII 路径同样复现），所以不是中文路径的锅。
+# 改用 hoisted：依赖以真实文件（硬链接自 store）落盘，绕开链接问题。
 nodeLinker: hoisted
+
+packages:
+  - react-weather-card
+
+allowBuilds:
+  esbuild: true
