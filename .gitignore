@@ -26,3 +26,12 @@ Thumbs.db
 # 构建产物
 dist/
 build/
+
+# Milvus 持久化数据（etcd / minio / 本地快照）
+# 体积大、随运行频繁变动，clone 后由 docker compose 自动生成
+milvus/volumes/
+*.wal
+*.tmp
+
+# pnpm 配置备份
+*.bak-*
