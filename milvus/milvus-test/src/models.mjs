@@ -16,7 +16,7 @@ import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 
 // 对话 / 推理 → .env 的 OPENAI_*（本机指向 127.0.0.1:7863 网关）
 export const model = new ChatOpenAI({
-  temperature: 0,
+  temperature: 0.7,
   model: process.env.MODEL_NAME,
   apiKey: process.env.OPENAI_API_KEY,
   configuration: {
